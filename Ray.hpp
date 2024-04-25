@@ -11,7 +11,13 @@ class Ray {
         point3d origin;
         Vec3d direction;
     public:
-
+        Ray();
+        Ray(point3d origin, Vec3d direction);
+        void setOrigin(point3d orig);
+        void setDirection(Vec3d dir);
+        point3d getOrigin();
+        Vec3d getDirection();
+        point3d position(int t);
 };
 
 
