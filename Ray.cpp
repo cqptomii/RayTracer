@@ -13,7 +13,7 @@ void Ray::setOrigin(point3d orig) {
 }
 
 void Ray::setDirection(Vec3d dir) {
-    this->direction = dir
+    this->direction = dir;
 }
 
 point3d Ray::getOrigin() {
@@ -24,6 +24,6 @@ Vec3d Ray::getDirection() {
     return this->direction;
 }
 
-point3d Ray::position(int t) {
+point3d Ray::position(double t) {
     return this->origin +this->direction*t;
 }

@@ -4,7 +4,7 @@
 
 #ifndef RAYTRACER_VEC3D_HPP
 #define RAYTRACER_VEC3D_HPP
-
+#include "iostream"
 
 class Vec3d {
     public:
@@ -24,6 +24,7 @@ class Vec3d {
 
         double lengthSquare() const;
         double length() const;
+        void toString(std::string name);
 };
 
 // operator
@@ -32,8 +33,8 @@ Vec3d operator- (const Vec3d& u,const Vec3d& v);
 Vec3d operator* (const Vec3d& u,const Vec3d& v);
 Vec3d operator* (double t,const Vec3d& u);
 Vec3d operator* (const Vec3d& u, double t);
-Vec3d operator/ (double t, const Vec3d& u);
+Vec3d operator/ (const Vec3d& u,double t);
 Vec3d dot(const Vec3d& u, const Vec3d& v);
 Vec3d cross(const Vec3d& u, const Vec3d& v);
-Vec3d unit_vector(Vec3d u);
+Vec3d unit_vector(const Vec3d& u);
 #endif //RAYTRACER_VEC3D_HPP

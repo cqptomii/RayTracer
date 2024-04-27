@@ -17,7 +17,7 @@ class Ray {
         void setDirection(Vec3d dir);
         point3d getOrigin();
         Vec3d getDirection();
-        point3d position(int t);
+        point3d position(double t);
 };
 
 

@@ -41,6 +41,7 @@ Vec3d Vec3d::operator/=(double t) {
     if(t != 0) {
         return {e[0]/t,e[1]/t,e[2]/t};
     }
+    return {0,0,0};
 }
 
 double Vec3d::lengthSquare() const {
@@ -50,6 +51,12 @@ double Vec3d::lengthSquare() const {
 double Vec3d::length() const{
     return sqrt(lengthSquare());
 }
+
+void Vec3d::toString(std::string name) {
+    std::cout << name << std::endl;
+    std::cout << " X_axis : " << this->e[0] <<  "\n Y_axis : " << this->e[1] << "\n Z-axis : " << this->e[2] << std::endl;
+}
+
 Vec3d operator+ (const Vec3d& u, const Vec3d& v){
     return {u.e[0]+v.e[0],u.e[1]+v.e[1],u.e[2]+v.e[2]};
 }
@@ -65,7 +72,7 @@ Vec3d operator* (double t,const Vec3d& u){
 Vec3d operator* (const Vec3d& u, double t){
     return t * u;
 }
-Vec3d operator/ (double t, const Vec3d& u){
+Vec3d operator/ (const Vec3d& u,double t){
     return (1/t) * u;
 }
 
@@ -76,5 +83,5 @@ Vec3d cross(const Vec3d& u, const Vec3d& v){
     return {u.e[0]*v.e[0],u.e[1]*v.e[1],u.e[2]*v.e[2]};
 }
 Vec3d unit_vector(const Vec3d& u){
-    return u.length() * u;
+    return u / u.length() ;
 }
