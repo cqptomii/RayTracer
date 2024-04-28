@@ -5,11 +5,9 @@
 #ifndef RAYTRACER_COLOR_H
 #define RAYTRACER_COLOR_H
 #include "Vec3d.hpp"
-#include "iostream"
-
 using color = Vec3d;
 
-void write_color(std::ostream& out,color pixel_color){
+void write_color(std::ostream& out,const color& pixel_color){
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();

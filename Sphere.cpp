@@ -12,7 +12,7 @@ Sphere::Sphere(const point3d &center, double radius) : center(center){
     }
 }
 
-bool Sphere::hit(Ray& r, double t_min, double t_max, Intersection_hit &point) {
+bool Sphere::hit(const Ray& r, double t_min, double t_max, Intersection_hit &point) const{
     Vec3d so = r.getOrigin() - center;
     auto a = r.getDirection().lengthSquare();
     auto b = 2*dot(so,r.getDirection());
@@ -35,8 +35,8 @@ bool Sphere::hit(Ray& r, double t_min, double t_max, Intersection_hit &point) {
     // Store Intersection
     point.t = nearest_root;
     point.position = r.position(point.t);
-    point.normal = (point.position - center) / radius;
-
+    Vec3d outward_normal = (point.position - center) / radius;
+    point.set_normal_face(r,outward_normal);
     return true;
 }
 

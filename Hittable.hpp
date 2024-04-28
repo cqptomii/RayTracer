@@ -5,8 +5,8 @@
 #ifndef RAYTRACER_HITTABLE_HPP
 #define RAYTRACER_HITTABLE_HPP
 
-#include "Ray.hpp"
 #include "Intersection_hit.hpp"
+
 class Hittable {
 public:
     virtual ~Hittable() = default;

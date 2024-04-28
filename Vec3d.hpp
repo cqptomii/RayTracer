@@ -5,17 +5,16 @@
 #ifndef RAYTRACER_VEC3D_HPP
 #define RAYTRACER_VEC3D_HPP
 #include "iostream"
-
+#include "cmath"
 class Vec3d {
     public:
         double e[3];
-
         Vec3d();
         Vec3d(double x,double y,double z);
-        double x();
-        double y();
-        double z();
-        Vec3d operator- ();
+        double x() const;
+        double y() const;
+        double z() const ;
+        Vec3d operator- ()const;
         double operator[] (int i) const;
         double& operator[](int i);
         Vec3d operator+=(const Vec3d& u);
@@ -26,7 +25,7 @@ class Vec3d {
         double length() const;
         void toString(std::string name);
 };
-
+using point3d = Vec3d;
 // operator
 Vec3d operator+ (const Vec3d& u, const Vec3d& v);
 Vec3d operator- (const Vec3d& u,const Vec3d& v);

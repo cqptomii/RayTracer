@@ -14,7 +14,7 @@ private:
     double radius;
 public:
     Sphere(const point3d& center, double radius);
-    bool hit(Ray& r, double t_min, double t_max, Intersection_hit& point);
+    bool hit(const Ray& r, double t_min, double t_max, Intersection_hit& point) const override;
 };
 
 

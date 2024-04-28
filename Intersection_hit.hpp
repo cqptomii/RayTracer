@@ -11,7 +11,10 @@ public:
     point3d position;
     Vec3d normal;
     double t;
+    bool front_face;
+
     Intersection_hit();
+    void set_normal_face(const Ray& r, Vec3d& intersection_normal);
 };
 
 

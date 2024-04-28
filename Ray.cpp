@@ -16,14 +16,14 @@ void Ray::setDirection(Vec3d dir) {
     this->direction = dir;
 }
 
-point3d Ray::getOrigin() {
+point3d Ray::getOrigin() const{
     return this->origin;
 }
 
-Vec3d Ray::getDirection() {
+Vec3d Ray::getDirection() const {
     return this->direction;
 }
 
-point3d Ray::position(double t) {
+point3d Ray::position(double t) const{
     return this->origin +this->direction*t;
 }

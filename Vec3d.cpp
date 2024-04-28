@@ -3,23 +3,22 @@
 //
 
 #include "Vec3d.hpp"
-#include "cmath"
 Vec3d::Vec3d() : e{0,0,0}{}
 
 Vec3d::Vec3d(double x, double y, double z) : e{x,y,z} {}
-double Vec3d::x() {
+double Vec3d::x() const{
     return e[0];
 }
 
-double Vec3d::y() {
+double Vec3d::y() const{
     return e[1];
 }
 
-double Vec3d::z() {
+double Vec3d::z() const{
     return e[2];
 }
 
-Vec3d Vec3d::operator-() {
+Vec3d Vec3d::operator-() const{
     return {-e[0],-e[1],-e[2]};
 }
 double Vec3d::operator[](int i) const {
