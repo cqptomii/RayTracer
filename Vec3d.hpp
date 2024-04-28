@@ -34,7 +34,7 @@ Vec3d operator* (const Vec3d& u,const Vec3d& v);
 Vec3d operator* (double t,const Vec3d& u);
 Vec3d operator* (const Vec3d& u, double t);
 Vec3d operator/ (const Vec3d& u,double t);
-Vec3d dot(const Vec3d& u, const Vec3d& v);
+double dot(const Vec3d& u, const Vec3d& v);
 Vec3d cross(const Vec3d& u, const Vec3d& v);
 Vec3d unit_vector(const Vec3d& u);
 #endif //RAYTRACER_VEC3D_HPP

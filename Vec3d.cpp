@@ -76,8 +76,8 @@ Vec3d operator/ (const Vec3d& u,double t){
     return (1/t) * u;
 }
 
-Vec3d dot(const Vec3d& u, const Vec3d& v){
-    return {u.e[0]*v.e[0],u.e[1]*v.e[1],u.e[2]*v.e[2]};
+double dot(const Vec3d& u, const Vec3d& v){
+    return u.e[0]*v.e[0]+u.e[1]*v.e[1]+u.e[2]*v.e[2];
 }
 Vec3d cross(const Vec3d& u, const Vec3d& v){
     return {u.e[0]*v.e[0],u.e[1]*v.e[1],u.e[2]*v.e[2]};

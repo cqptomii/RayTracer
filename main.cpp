@@ -1,11 +1,31 @@
 #include <iostream>
 #include "color.h"
 #include "Ray.hpp"
-
+#include "cmath"
 using namespace std;
+double hit_sphere(const point3d& center, double radius,Ray& r){
+    Vec3d so = r.getOrigin() - center;
+    auto a = r.getDirection().lengthSquare();
+    auto b = 2*dot(so,r.getDirection());
+    auto c = so.lengthSquare() - radius * radius;
+    auto delta = b*b - 4*a*c;
+
+    if(delta < 0 ){
+        return -1.0;
+    }else{
+        return -b-sqrt(delta)/(2*a);
+    }
+}
 Vec3d ray_color(Ray r){
+    auto t = hit_sphere(point3d(0,0,1),0.5,r);
+    if( t > 0.0) {
+        Vec3d pixel_normal = unit_vector(r.position(t) - Vec3d(0, 0,1));
+        return 0.5*Vec3d(pixel_normal.x()+1,pixel_normal.y(),pixel_normal.z()+1);
+    }
+
     Vec3d unit_direction = unit_vector(r.getDirection());
     auto a = 0.5*(unit_direction.y() + 1.0);
+
     return (1.0 - a)*Vec3d(1.0,1.0,1.0) + a*Vec3d(0.5,0.7,1.0);
 }
 int main() {
