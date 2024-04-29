@@ -6,12 +6,12 @@
 #define RAYTRACER_HITTABLE_HPP
 
 #include "Intersection_hit.hpp"
-
+#include "ToolKit.hpp"
 class Hittable {
 public:
     virtual ~Hittable() = default;
 
-    virtual bool hit(const Ray& r, double t_min, double t_max, Intersection_hit& point) const = 0;
+    virtual bool hit(const Ray& r, Interval ray_t, Intersection_hit& point) const = 0;
 };
 
 

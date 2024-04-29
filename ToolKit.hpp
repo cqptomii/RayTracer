@@ -8,7 +8,8 @@
 #include <iostream>
 #include <limits>
 #include <memory>
-#include "color.h"
+
+#include "Interval.hpp"
 #include "Ray.hpp"
 #include "Vec3d.hpp"
 

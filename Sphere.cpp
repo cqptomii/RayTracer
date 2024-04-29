@@ -12,7 +12,7 @@ Sphere::Sphere(const point3d &center, double radius) : center(center){
     }
 }
 
-bool Sphere::hit(const Ray& r, double t_min, double t_max, Intersection_hit &point) const{
+bool Sphere::hit(const Ray& r, Interval ray_t, Intersection_hit &point) const{
     Vec3d so = r.getOrigin() - center;
     auto a = r.getDirection().lengthSquare();
     auto b = 2*dot(so,r.getDirection());
@@ -25,9 +25,9 @@ bool Sphere::hit(const Ray& r, double t_min, double t_max, Intersection_hit &poi
     }
     auto sqrt_delta = sqrt(delta);
     auto nearest_root = (-b - sqrt_delta)/(2*a);
-    if(nearest_root <= t_min || nearest_root >= t_max){
+    if(!ray_t.surround(nearest_root)){
         nearest_root = (-b + sqrt_delta)/(2*a);
-        if(nearest_root <= t_min || nearest_root >= t_max){
+        if(!ray_t.surround(nearest_root)){
             return false;
         }
     }

@@ -12,7 +12,7 @@
 class Hittable_List : public Hittable{
 public:
     std::vector<shared_ptr<Hittable>> objects;
-    Hittable_List(){}
+    Hittable_List()= default;
     explicit Hittable_List(const shared_ptr<Hittable>& object) {
         add(object);
     }
@@ -23,12 +23,12 @@ public:
         objects.push_back(object);
     }
 
-    bool hit(const Ray& r, double t_min, double t_max, Intersection_hit& point) const override{
+    bool hit(const Ray& r,Interval ray_t, Intersection_hit& point) const override{
         Intersection_hit point_record;
         bool hit_something = false;
-        auto t_far = t_max;
+        auto t_far = ray_t.max;
         for( const auto& object : objects){
-            if( object->hit(r,t_min,t_far,point_record)){
+            if( object->hit(r,Interval(ray_t.min,t_far),point_record)){
                 hit_something = true;
                 t_far = point_record.t;
                 point = point_record;
