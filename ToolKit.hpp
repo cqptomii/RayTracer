@@ -8,6 +8,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <cstdlib>
 
 #include "Interval.hpp"
 #include "Ray.hpp"
@@ -22,6 +23,12 @@ const double infinity = std::numeric_limits<double>::infinity();
 
 inline double degree_to_radian(double degree){
     return degree * pi /180.0;
+}
+inline double random_number(){
+    return rand() / (RAND_MAX + 1.0);
+}
+inline double random_number(int min, int max){
+    return min + (max-min)*random_number();
 }
 
 #endif //RAYTRACER_TOOLKIT_HPP

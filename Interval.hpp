@@ -15,7 +15,7 @@ public:
     double size() const;
     bool between(double value) const;
     bool surround(double value) const;
-
+    double estimate(double x) const;
     static const Interval univers_R;
 };
 

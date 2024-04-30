@@ -17,5 +17,12 @@ bool Interval::between(double value) const {
 bool  Interval::surround(double value) const {
     return  (value > min && value < max);
 }
+double Interval::estimate(double x) const {
+    if(x < min )
+        return min;
+    if(x>max)
+        return max;
+    return x;
+}
 const Interval Interval::univers_R = Interval(-infinity,+infinity);
 

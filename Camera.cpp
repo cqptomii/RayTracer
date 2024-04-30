@@ -14,22 +14,29 @@ void Camera::render(const Hittable_List &world) {
     for(int j = 0; j < image_height; j++){
         std::clog << "Scanline Done: " << j << " / " << image_height << std::endl;
         for(int i = 0; i < image_width; i++){
-            auto current_pixel = first_pixel_location + (i*delta_u) + (j*delta_v);
-            auto ray_direction = current_pixel - camera_center;
-            Ray r = Ray(camera_center,ray_direction);
+            /**
+                auto current_pixel = first_pixel_location + (i*delta_u) + (j*delta_v);
+                auto ray_direction = current_pixel - camera_center;
+                Ray r = Ray(camera_center,ray_direction);
 
-            auto pixel_color = ray_color(r,world);
-            write_color(std::cout, pixel_color);
+                auto pixel_color = ray_color(r,world);
+             **/
+            color pixel_color(0,0,0);
+            for(int sample = 1; sample <= sample_number; sample++){
+                Ray r = get_ray(i,j,sample);
+                pixel_color = pixel_color + ray_color(r,world);
+            }
+            write_color(std::cout,scale_factor_sampling * pixel_color);
         }
         std::clog << "Finished" << std::endl;
     }
 }
-Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1){}
+Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1), sample_number(4){}
 void Camera::initialize() {
     // Set up image size
     this->image_height = int(image_width/aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
-
+    this->scale_factor_sampling = 1.0 / sample_number;
     this->camera_center = Vec3d(0,0,0);
 
     // Set up viewport
@@ -59,4 +66,44 @@ Vec3d Camera::ray_color(Ray &r, const Hittable &world) {
         auto a = 0.5*(unit_direction.y() + 1.0);
 
         return (1.0 - a)*Vec3d(1.0,1.0,1.0) + a*Vec3d(0.5,0.7,1.0);
+}
+// compute a ray from the camera to a precise sample in pixel {i,j}
+Ray Camera::get_ray(int pixel_u_index, int pixel_v_index, int sample_index){
+    auto pixel_ij = first_pixel_location + (delta_u * (pixel_u_index)) + (delta_v*(pixel_v_index ));
+    if(sample_index > 4){
+        auto random_sample = random_sample_square();
+        pixel_ij += random_sample.x()*delta_u + random_sample_square().y()*delta_v;
+    }else{
+        if( sample_index == 1){
+            pixel_ij += msaa4_top_left();
+        }
+        if(sample_index == 2){
+            pixel_ij += msaa4_top_right();
+        }
+        if(sample_index == 3){
+            pixel_ij += msaa4_bottom_left();
+        }
+        if (sample_index == 4){
+            pixel_ij += msaa4_bottom_right();
+        }
+    }
+    auto ray_direction = pixel_ij - camera_center;
+    return {camera_center,ray_direction};
+}
+
+Vec3d Camera::random_sample_square() {
+    // return random point between (-0.5,-0.5) - (0.5,0.5)
+    return {random_number()-0.5,random_number()-0.5,0};
+}
+Vec3d Camera::msaa4_top_left() {
+    return -0.4*delta_v-0.1*delta_u;
+}
+Vec3d Camera::msaa4_top_right() {
+    return -0.1*delta_v + 0.4*delta_u;
+}
+Vec3d Camera::msaa4_bottom_left() {
+    return 0.4*delta_v + 0.1*delta_u;
+}
+Vec3d Camera::msaa4_bottom_right() {
+    return 0.1*delta_v - 0.4*delta_u;
 }
