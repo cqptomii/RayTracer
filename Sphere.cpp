@@ -4,7 +4,7 @@
 
 #include "Sphere.hpp"
 #include "cmath"
-Sphere::Sphere(const point3d &center, double radius) : center(center){
+Sphere::Sphere(const point3d &center, double radius, const shared_ptr<Material>& mat) : center(center), mat(mat){
     if(radius > 0){
         this->radius = radius;
     }else{
@@ -37,6 +37,7 @@ bool Sphere::hit(const Ray& r, Interval ray_t, Intersection_hit &point) const{
     point.position = r.position(point.t);
     Vec3d outward_normal = (point.position - center) / radius;
     point.set_normal_face(r,outward_normal);
+    point.mat = mat;
     return true;
 }
 

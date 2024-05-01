@@ -1,10 +1,9 @@
 //
 // Created by tomfr on 29/04/2024.
 //
-#include "ToolKit.hpp"
 #include "Hittable_List.h"
-#include "color.h"
 #include "Camera.hpp"
+#include "Material.hpp"
 
 void Camera::render(const Hittable_List &world) {
     // generated the camera
@@ -61,8 +60,12 @@ Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
         Intersection_hit point;
 
         if(world.hit(r,Interval(0.001,infinity),point)){
-            Vec3d diffuse_direction = random_lambertian_reflection(point.normal);
-            return 0.5 * (ray_color(Ray(point.position,diffuse_direction),depth -1,world));
+            Ray reflect_ray;
+            color attenuation;
+            if(point.mat->reflexion(r,point,attenuation,reflect_ray)){
+                return attenuation * (ray_color(reflect_ray,depth-1,world));
+            }
+            return {0,0,0};
         }
 
         Vec3d unit_direction = unit_vector(r.getDirection());

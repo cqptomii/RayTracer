@@ -1,12 +1,7 @@
 //
-// Created by tomfr on 26/04/2024.
+// Created by tomfr on 01/05/2024.
 //
-
-#ifndef RAYTRACER_COLOR_H
-#define RAYTRACER_COLOR_H
-#include "Vec3d.hpp"
-#include "Interval.hpp"
-using color = Vec3d;
+#include "color.hpp"
 double linear_to_gamma(double linear_value){
     auto gamma = 2.2;
 
@@ -30,4 +25,3 @@ void write_color(std::ostream& out,const color& pixel_color){
     out << rInt << ' ' << gInt << ' ' << bInt << std::endl;
 
 }
-#endif //RAYTRACER_COLOR_H

@@ -25,6 +25,7 @@ class Vec3d {
         double lengthSquare() const;
         double length() const;
         void toString(std::string name);
+        bool near_zero();
 };
 using point3d = Vec3d;
 // operator
@@ -42,5 +43,6 @@ Vec3d random();
 Vec3d random(double min, double max);
 Vec3d random_vector_in_unit_sphere();
 Vec3d random_in_hemisphere(Vec3d& p);
-Vec3d random_lambertian_reflection(Vec3d &normal_p);
+Vec3d random_lambertian_reflection(const Vec3d &normal_p) ;
+Vec3d mirror_reflect(const Vec3d& v, const Vec3d& normal);
 #endif //RAYTRACER_VEC3D_HPP

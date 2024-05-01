@@ -4,12 +4,13 @@
 
 #ifndef RAYTRACER_INTERSECTION_HIT_HPP
 #define RAYTRACER_INTERSECTION_HIT_HPP
+#include "Material.hpp"
 
-#include "Ray.hpp"
 class Intersection_hit {
 public:
     point3d position;
     Vec3d normal;
+    shared_ptr<Material> mat;
     double t;
     bool front_face;
 

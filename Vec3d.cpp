@@ -55,6 +55,10 @@ void Vec3d::toString(std::string name) {
     std::cout << name << std::endl;
     std::cout << " X_axis : " << this->e[0] <<  "\n Y_axis : " << this->e[1] << "\n Z-axis : " << this->e[2] << std::endl;
 }
+bool Vec3d::near_zero(){
+    auto value = 1e-6;
+    return (fabs(e[0]) < value) && (fabs(e[1]) < value) && (fabs(e[2]) < value);
+}
 
 Vec3d operator+ (const Vec3d& u, const Vec3d& v){
     return {u.e[0]+v.e[0],u.e[1]+v.e[1],u.e[2]+v.e[2]};
@@ -107,6 +111,10 @@ Vec3d random_in_hemisphere(Vec3d &normal_p) {
         return -vec;
     }
 }
-Vec3d random_lambertian_reflection(Vec3d &normal_p){
+Vec3d random_lambertian_reflection(const Vec3d &normal_p) {
     return (normal_p + random_vector_in_unit_sphere());
+}
+Vec3d mirror_reflect(const Vec3d& v, const Vec3d& normal){
+    // return v - 2*dot(v, normal)*normal;
+    return 2*(v+normal) - v;
 }
