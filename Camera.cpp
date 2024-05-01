@@ -24,14 +24,14 @@ void Camera::render(const Hittable_List &world) {
             color pixel_color(0,0,0);
             for(int sample = 1; sample <= sample_number; sample++){
                 Ray r = get_ray(i,j,sample);
-                pixel_color = pixel_color + ray_color(r,world);
+                pixel_color = pixel_color + ray_color(r,diffuse_reflection_amount,world);
             }
             write_color(std::cout,scale_factor_sampling * pixel_color);
         }
         std::clog << "Finished" << std::endl;
     }
 }
-Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1), sample_number(4){}
+Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1), sample_number(4), diffuse_reflection_amount(10){}
 void Camera::initialize() {
     // Set up image size
     this->image_height = int(image_width/aspect_ratio);
@@ -55,11 +55,14 @@ void Camera::initialize() {
 
 }
 
-Vec3d Camera::ray_color(Ray &r, const Hittable &world) {
+Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
+        if(depth <= 0)
+            return {0,0,0};
         Intersection_hit point;
 
-        if(world.hit(r,Interval(0,infinity),point)){
-            return 0.5 * (point.normal + color (1,1,1));
+        if(world.hit(r,Interval(0.001,infinity),point)){
+            Vec3d diffuse_direction = random_in_hemisphere(point.normal);
+            return 0.5 * (ray_color(Ray(point.position,diffuse_direction),depth -1,world));
         }
 
         Vec3d unit_direction = unit_vector(r.getDirection());

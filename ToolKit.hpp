@@ -27,7 +27,7 @@ inline double degree_to_radian(double degree){
 inline double random_number(){
     return rand() / (RAND_MAX + 1.0);
 }
-inline double random_number(int min, int max){
+inline double random_number(double min, double max){
     return min + (max-min)*random_number();
 }
 

@@ -3,6 +3,7 @@
 //
 
 #include "Vec3d.hpp"
+#include "Interval.hpp"
 Vec3d::Vec3d() : e{0,0,0}{}
 
 Vec3d::Vec3d(double x, double y, double z) : e{x,y,z} {}
@@ -42,7 +43,6 @@ Vec3d Vec3d::operator/=(double t) {
     }
     return {0,0,0};
 }
-
 double Vec3d::lengthSquare() const {
     return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
 }
@@ -83,4 +83,28 @@ Vec3d cross(const Vec3d& u, const Vec3d& v){
 }
 Vec3d unit_vector(const Vec3d& u){
     return u / u.length() ;
+}
+
+Vec3d random() {
+    return {random_number(),random_number(),random_number()};
+}
+Vec3d random(double min, double max) {
+    return {random_number(min, max), random_number(min, max), random_number(min, max)};
+}
+Vec3d random_vector_in_unit_sphere() {
+    while(true) {
+        auto vec = random(-1, 1);
+        if (vec.lengthSquare() <= 1)
+            return vec;
+    }
+
+}
+Vec3d random_in_hemisphere(Vec3d &normal_p) {
+    auto vec = random_vector_in_unit_sphere();
+    vec = unit_vector(vec);
+    if(dot(normal_p,vec) > 0.0){
+        return vec;
+    }else{
+        return -vec;
+    }
 }

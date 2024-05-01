@@ -14,6 +14,8 @@ int main() {
         // Image Rendered properties
     cam.aspect_ratio = 16.0 / 9.0;
     cam.image_width = 400;
+    cam.sample_number = 100;
+    cam.diffuse_reflection_amount = 50;
     cam.render(world);
     return 0;
 }

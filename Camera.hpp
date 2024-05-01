@@ -10,6 +10,7 @@ public:
     double aspect_ratio;
     double image_width;
     int sample_number;
+    int diffuse_reflection_amount;
     void render(const Hittable_List& world);
     Camera();
 private:
@@ -20,7 +21,7 @@ private:
     Vec3d delta_u;
     Vec3d delta_v;
     void initialize();
-    static Vec3d ray_color(Ray& r, const Hittable& world) ;
+    static Vec3d ray_color(const Ray& r, int depth,const Hittable& world) ;
 
     Ray get_ray(int pixel_u_index, int pixel_v_index,int sample_index);
     // Utility Function for Aliasing
