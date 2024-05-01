@@ -61,7 +61,7 @@ Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
         Intersection_hit point;
 
         if(world.hit(r,Interval(0.001,infinity),point)){
-            Vec3d diffuse_direction = point.position + random_vector_in_unit_sphere();
+            Vec3d diffuse_direction = random_lambertian_reflection(point.normal);
             return 0.5 * (ray_color(Ray(point.position,diffuse_direction),depth -1,world));
         }
 
@@ -72,24 +72,24 @@ Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
 }
 // compute a ray from the camera to a precise sample in pixel {i,j}
 Ray Camera::get_ray(int pixel_u_index, int pixel_v_index, int sample_index){
-    auto pixel_ij = first_pixel_location + (delta_u * (pixel_u_index)) + (delta_v*(pixel_v_index ));
+    Vec3d random_sample;
     if(sample_index > 4){
-        auto random_sample = random_sample_square();
-        pixel_ij += random_sample.x()*delta_u + random_sample_square().y()*delta_v;
+        random_sample = random_sample_square();
     }else{
         if( sample_index == 1){
-            pixel_ij += msaa4_top_left();
+             random_sample = msaa4_top_left();
         }
         if(sample_index == 2){
-            pixel_ij += msaa4_top_right();
+             random_sample = msaa4_top_right();
         }
         if(sample_index == 3){
-            pixel_ij += msaa4_bottom_left();
+             random_sample = msaa4_bottom_left();
         }
         if (sample_index == 4){
-            pixel_ij += msaa4_bottom_right();
+             random_sample = msaa4_bottom_right();
         }
     }
+    auto pixel_ij = first_pixel_location + (delta_u * (pixel_u_index + random_sample.x())) + (delta_v*(pixel_v_index + random_sample.y()));
     auto ray_direction = pixel_ij - camera_center;
     return {camera_center,ray_direction};
 }
