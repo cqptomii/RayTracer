@@ -97,7 +97,6 @@ Vec3d random_vector_in_unit_sphere() {
         if (vec.lengthSquare() <= 1)
             return vec;
     }
-
 }
 Vec3d random_in_hemisphere(Vec3d &normal_p) {
     auto vec = random_vector_in_unit_sphere();
@@ -107,4 +106,7 @@ Vec3d random_in_hemisphere(Vec3d &normal_p) {
     }else{
         return -vec;
     }
+}
+Vec3d random_lambertian_reflection(Vec3d &normal_p){
+    return (normal_p + random_vector_in_unit_sphere());
 }

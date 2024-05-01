@@ -61,7 +61,7 @@ Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
         Intersection_hit point;
 
         if(world.hit(r,Interval(0.001,infinity),point)){
-            Vec3d diffuse_direction = random_in_hemisphere(point.normal);
+            Vec3d diffuse_direction = point.position + random_vector_in_unit_sphere();
             return 0.5 * (ray_color(Ray(point.position,diffuse_direction),depth -1,world));
         }
 

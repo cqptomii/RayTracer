@@ -42,4 +42,5 @@ Vec3d random();
 Vec3d random(double min, double max);
 Vec3d random_vector_in_unit_sphere();
 Vec3d random_in_hemisphere(Vec3d& p);
+Vec3d random_lambertian_reflection(Vec3d &normal_p);
 #endif //RAYTRACER_VEC3D_HPP
