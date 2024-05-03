@@ -9,8 +9,9 @@
 class Metal : public Material{
 private:
     color fractional_reflection;
+    double fuzzy_reflection;
 public:
-     Metal(const color& fractional_reflex);
+    Metal(const color& fractional_reflex, double fuzz);
     bool reflexion(const Ray& r, const Intersection_hit& point, color& attenuation, Ray& r_reflect) const override;
 };
 

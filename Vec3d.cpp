@@ -60,6 +60,10 @@ bool Vec3d::near_zero(){
     return (fabs(e[0]) < value) && (fabs(e[1]) < value) && (fabs(e[2]) < value);
 }
 
+Vec3d Vec3d::rotate(Vec3d rotate_index) {
+    return {};
+}
+
 Vec3d operator+ (const Vec3d& u, const Vec3d& v){
     return {u.e[0]+v.e[0],u.e[1]+v.e[1],u.e[2]+v.e[2]};
 }
@@ -83,7 +87,9 @@ double dot(const Vec3d& u, const Vec3d& v){
     return u.e[0]*v.e[0]+u.e[1]*v.e[1]+u.e[2]*v.e[2];
 }
 Vec3d cross(const Vec3d& u, const Vec3d& v){
-    return {u.e[0]*v.e[0],u.e[1]*v.e[1],u.e[2]*v.e[2]};
+    return {u.e[1]*v.e[2] - u.e[2]*v.e[1],
+            u.e[2]*v.e[0] - u.e[0]*v.e[2],
+            u.e[0]*v.e[1] - u.e[1]*v.e[0]};
 }
 Vec3d unit_vector(const Vec3d& u){
     return u / u.length() ;

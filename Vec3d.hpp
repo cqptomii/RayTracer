@@ -26,6 +26,7 @@ class Vec3d {
         double length() const;
         void toString(std::string name);
         bool near_zero();
+        Vec3d rotate(Vec3d rotate_index);
 };
 using point3d = Vec3d;
 // operator

@@ -30,26 +30,93 @@ void Camera::render(const Hittable_List &world) {
         std::clog << "Finished" << std::endl;
     }
 }
-Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1), sample_number(4), diffuse_reflection_amount(10){}
+Camera::Camera() : image_width(400),aspect_ratio(16.0/9.0), image_height(1), sample_number(20), diffuse_reflection_amount(10), fov(120),vector_up(Vec3d(0,1,0)){}
+Camera::Camera(int width, Vec3d &center, Vec3d &look_at, double angle, int sampling_number,int amount_diffuse_reflect) : camera_center(center), view_direction(look_at), fov(angle),sample_number(sampling_number),diffuse_reflection_amount(amount_diffuse_reflect), aspect_ratio(16.0/9.0){
+    if(width < 1){
+        this->image_width = 1;
+    }else{
+        this->image_width = width;
+    }
+}
+void Camera::set_fov(double angle){
+    this->fov = fabs(angle);
+}
+void Camera::set_scale_factor(double factor) {
+    this->aspect_ratio = fabs(factor);
+}
+void Camera::set_origin(point3d &center) {
+    this->camera_center = center;
+}
+void Camera::set_direction(Vec3d& look_at) {
+    this->view_direction = look_at;
+}
+void Camera::set_image_width(int width) {
+    if(width < 1){
+        this->image_width = 1;
+    }else{
+        this->image_width = width;
+    }
+}
+void Camera::set_aspect_ratio(double ratio){
+    this->aspect_ratio = ratio;
+}
+void Camera::set_sample_amount(int number){
+    if(number < 1){
+        this->sample_number = 1;
+    }else{
+        this->sample_number = number;
+    }
+}
+void Camera::set_diffuse_reflection_amount(int number){
+    if(number < 0){
+        this->diffuse_reflection_amount = 0;
+    }else{
+        this->diffuse_reflection_amount = number;
+    }
+}
+void Camera::toString() {
+    std::cout << "--- Camera Settings ---" << std::endl;
+    camera_center.toString("Camera center :");
+    view_direction.toString("Camera direction : ");
+    std::cout << "Sample amount :" << sample_number << std::endl;
+    std:: cout << "image width :" << image_width << "  , image height: " << image_height << std::endl;
+}
+void Camera::move_camera(Vec3d translate, Vec3d rotate) {
+    // Translation
+    auto position = camera_center + translate;
+    camera_center = position;
+    view_origin = position;
+
+    // Rotation
+}
 void Camera::initialize() {
-    // Set up image size
+        // Set up image size
     this->image_height = int(image_width/aspect_ratio);
     image_height = (image_height < 1) ? 1 : image_height;
+        // Sampling Setup
     this->scale_factor_sampling = 1.0 / sample_number;
-    this->camera_center = Vec3d(0,0,0);
+
+        // Camera Setup
+    this->view_origin = camera_center;
+    auto focal_length = (view_direction - view_origin).length();
+    auto theta = degree_to_radian(fov);
+    this->h = tan(theta/2);
+        // Camera Coordinate system
+    this->base_w = unit_vector(view_direction - view_origin);
+    this->base_u = unit_vector(cross(vector_up,base_w));
+    this->base_v = cross(base_w,base_u);
 
     // Set up viewport
-    auto focal_length = 1.0;
-    auto viewport_height = 2.0;
+    auto viewport_height = 2.0*h*focal_length;
     auto viewport_width = viewport_height * (double(image_width)/image_height);
 
-    auto viewport_u = Vec3d(viewport_width,0,0);
-    auto viewport_v = Vec3d(0,-viewport_height,0);
+    auto viewport_u = viewport_width * base_u ;
+    auto viewport_v = viewport_height * -base_v;
 
     this->delta_u = viewport_u / image_width;
     this->delta_v = viewport_v / image_height;
 
-    auto viewport_top_corner = camera_center + Vec3d(0,0,focal_length) - viewport_u/2 - viewport_v/2;
+    auto viewport_top_corner = camera_center + (focal_length*base_w) - viewport_u/2 - viewport_v/2;
     this->first_pixel_location = viewport_top_corner + delta_u/2 + delta_v/2;
 
 }
@@ -113,3 +180,4 @@ Vec3d Camera::msaa4_bottom_left() {
 Vec3d Camera::msaa4_bottom_right() {
     return 0.1*delta_v - 0.4*delta_u;
 }
+

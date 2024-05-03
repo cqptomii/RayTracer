@@ -7,19 +7,43 @@
 
 class Camera {
 public:
-    double aspect_ratio;
-    double image_width;
-    int sample_number;
-    int diffuse_reflection_amount;
     void render(const Hittable_List& world);
     Camera();
+    Camera(int width,Vec3d& center, Vec3d& look_at, double angle, int sampling_number, int amount_diffuse_reflect);
+    void set_fov(double angle);
+    void set_scale_factor(double factor);
+    void set_origin(point3d& center);
+    void set_direction(Vec3d& look_at);
+    void set_image_width(int width);
+    void set_aspect_ratio(double ratio);
+    void set_sample_amount(int number);
+    void set_diffuse_reflection_amount(int number);
+    void move_camera(Vec3d translate,Vec3d rotate);
+    void toString();
 private:
+        // Image properties
     double image_height;
-    double scale_factor_sampling; // scale factor in addition of number of samples
+    double aspect_ratio;
+    double image_width;
+
+        // Camera properties
     point3d camera_center;
+    double fov;
+    Vec3d view_origin;
+    Vec3d view_direction;
+    Vec3d vector_up;
+    Vec3d base_u,base_v,base_w;
+    double scale_factor_sampling; // scale factor in addition of number of samples
+    int sample_number;
+    int diffuse_reflection_amount;
+
+        // Viewport properties
+    double h;
     point3d first_pixel_location;
     Vec3d delta_u;
     Vec3d delta_v;
+
+
     void initialize();
     static Vec3d ray_color(const Ray& r, int depth,const Hittable& world) ;
 
