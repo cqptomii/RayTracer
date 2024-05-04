@@ -46,4 +46,5 @@ Vec3d random_vector_in_unit_sphere();
 Vec3d random_in_hemisphere(Vec3d& p);
 Vec3d random_lambertian_reflection(const Vec3d &normal_p) ;
 Vec3d mirror_reflect(const Vec3d& v, const Vec3d& normal);
+Vec3d refraction(const Vec3d& incident_ray, const Vec3d& normal_vector,double refrac_clue);
 #endif //RAYTRACER_VEC3D_HPP

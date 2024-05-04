@@ -121,6 +121,12 @@ Vec3d random_lambertian_reflection(const Vec3d &normal_p) {
     return (normal_p + random_vector_in_unit_sphere());
 }
 Vec3d mirror_reflect(const Vec3d& v, const Vec3d& normal){
-    // return v - 2*dot(v, normal)*normal;
-    return 2*(v+normal) - v;
+     return v - 2*dot(v, normal)*normal;
+}
+Vec3d refraction(const Vec3d& incident_ray, const Vec3d& normal_vector,double refrac_clue){
+    auto cos_theta = fmin(dot(-incident_ray,normal_vector),1.0);
+    auto sin_theta_square = 1-cos_theta*cos_theta;
+    auto left = refrac_clue *(incident_ray + cos_theta*normal_vector);
+    auto right = -sqrt(fabs(1.0 - refrac_clue*refrac_clue*sin_theta_square))*normal_vector;
+    return left + right;
 }
