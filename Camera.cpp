@@ -74,6 +74,20 @@ void Camera::set_diffuse_reflection_amount(int number){
         this->diffuse_reflection_amount = number;
     }
 }
+void Camera::set_defocus_angle(double angle) {
+    this->blur_angle = angle;
+}
+void Camera::set_defocus_distance(double distance) {
+    if(distance > 0){
+        this->focus_dist = distance;
+    }
+}
+void Camera::set_disk_vector_u(Vec3d vector){
+    this->defocus_disku = vector;
+}
+void Camera::set_disk_vector_v(Vec3d vector){
+    this->defocus_diskv = vector;
+}
 void Camera::toString() {
     std::cout << "--- Camera Settings ---" << std::endl;
     camera_center.toString("Camera center :");
@@ -98,16 +112,16 @@ void Camera::initialize() {
 
         // Camera Setup
     this->view_origin = camera_center;
-    auto focal_length = (view_direction - view_origin).length();
     auto theta = degree_to_radian(fov);
     this->h = tan(theta/2);
+
         // Camera Coordinate system
     this->base_w = unit_vector(view_direction - view_origin);
     this->base_u = unit_vector(cross(vector_up,base_w));
     this->base_v = cross(base_w,base_u);
 
     // Set up viewport
-    auto viewport_height = 2.0*h*focal_length;
+    auto viewport_height = 2.0*h*focus_dist;
     auto viewport_width = viewport_height * (double(image_width)/image_height);
 
     auto viewport_u = viewport_width * base_u ;
@@ -116,9 +130,14 @@ void Camera::initialize() {
     this->delta_u = viewport_u / image_width;
     this->delta_v = viewport_v / image_height;
 
-    auto viewport_top_corner = camera_center + (focal_length*base_w) - viewport_u/2 - viewport_v/2;
+    auto viewport_top_corner = camera_center + (focus_dist*base_w) - viewport_u/2 - viewport_v/2;
     this->first_pixel_location = viewport_top_corner + delta_u/2 + delta_v/2;
 
+
+    // Defocus disk basis vector
+    auto defocus_radius = focus_dist * tan(degree_to_radian(blur_angle/2));
+    defocus_disku = base_u * defocus_radius;
+    defocus_diskv = base_v * defocus_radius;
 }
 
 Vec3d Camera::ray_color(const Ray &r, int depth, const Hittable &world) {
@@ -159,14 +178,19 @@ Ray Camera::get_ray(int pixel_u_index, int pixel_v_index, int sample_index){
              random_sample = msaa4_bottom_right();
         }
     }
+    auto ray_origin = (blur_angle <= 0) ? camera_center : disk_sample();
     auto pixel_ij = first_pixel_location + (delta_u * (pixel_u_index + random_sample.x())) + (delta_v*(pixel_v_index + random_sample.y()));
-    auto ray_direction = pixel_ij - camera_center;
-    return {camera_center,ray_direction};
+    auto ray_direction = pixel_ij - ray_origin;
+    return {ray_origin,ray_direction};
 }
 
 Vec3d Camera::random_sample_square() {
     // return random point between (-0.5,-0.5) - (0.5,0.5)
     return {random_number()-0.5,random_number()-0.5,0};
+}
+point3d Camera::disk_sample() const{
+    auto p = random_unit_disk();
+    return camera_center +(p[0]*defocus_disku) + (p[1]*defocus_diskv);
 }
 Vec3d Camera::msaa4_top_left() {
     return -0.4*delta_v-0.1*delta_u;

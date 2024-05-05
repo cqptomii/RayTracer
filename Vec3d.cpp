@@ -130,3 +130,12 @@ Vec3d refraction(const Vec3d& incident_ray, const Vec3d& normal_vector,double re
     auto right = -sqrt(fabs(1.0 - refrac_clue*refrac_clue*sin_theta_square))*normal_vector;
     return left + right;
 }
+Vec3d random_unit_disk(){
+    while(true){
+        auto  test = Vec3d(random_number(-1,1),random_number(-1,1),0);
+
+        if (test.lengthSquare() < 1){
+            return test;
+        }
+    }
+}

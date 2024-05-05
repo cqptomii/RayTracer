@@ -18,6 +18,10 @@ public:
     void set_aspect_ratio(double ratio);
     void set_sample_amount(int number);
     void set_diffuse_reflection_amount(int number);
+    void set_defocus_angle(double angle);
+    void set_defocus_distance(double distance);
+    void set_disk_vector_u(Vec3d vector);
+    void set_disk_vector_v(Vec3d vector);
     void move_camera(Vec3d translate,Vec3d rotate);
     void toString();
 private:
@@ -43,6 +47,11 @@ private:
     Vec3d delta_u;
     Vec3d delta_v;
 
+        // Blur properties
+    double blur_angle;
+    double focus_dist;
+    Vec3d defocus_disku;
+    Vec3d defocus_diskv;
 
     void initialize();
     static Vec3d ray_color(const Ray& r, int depth,const Hittable& world) ;
@@ -50,7 +59,7 @@ private:
     Ray get_ray(int pixel_u_index, int pixel_v_index,int sample_index);
     // Utility Function for Aliasing
     static Vec3d random_sample_square();
-
+    point3d disk_sample()const;
     // Utility Function For MSAA4 AntiAliasing
     Vec3d msaa4_top_left();
     Vec3d msaa4_top_right();
